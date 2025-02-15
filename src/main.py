@@ -15,25 +15,26 @@ def is_primitive(value):
 
 def get_config_value(path, default=NO_DEFAULT):
     config_tags = os.environ.get("CONFIG_TAG", "").split(",") + [""]
-    value = CONFIG
+    keys = path.split(".")
 
-    try:
-        for key in path.split("."):
-            if not isinstance(value, dict):
-                break
+    def recursive_lookup(cfg, remaining_keys):
+        if not remaining_keys:
+            return cfg if is_primitive(cfg) else None
 
-            for tag in config_tags:
-                tagged_key = f"{key}[{tag}]" if tag else key
-                if tagged_key in value:
-                    value = value[tagged_key]
-                    if is_primitive(value):
-                        return value
-                    break
+        key, *next_keys = remaining_keys
 
-    except KeyError:
-        pass
+        for tag in config_tags:
+            tagged_key = f"{key}[{tag}]" if tag else key
+            if tagged_key in cfg:
+                result = recursive_lookup(cfg[tagged_key], next_keys)
+                if result is not None:
+                    return result
 
-    if value is CONFIG or not is_primitive(value):
+        return None
+
+    value = recursive_lookup(CONFIG, keys)
+
+    if value is None:
         if default is NO_DEFAULT:
             raise KeyError(f"No config value found at: {path}")
         return default
