@@ -5,13 +5,9 @@ from main import get_config_value
 
 @pytest.fixture(autouse=True)
 def reset_config_tag():
-    """Ensure CONFIG_TAG is reset before each test."""
-    original_tag = os.environ.get("CONFIG_TAG")
     yield
-    if original_tag is None:
-        os.environ.pop("CONFIG_TAG", None)
-    else:
-        os.environ["CONFIG_TAG"] = original_tag
+
+    os.environ.pop("CONFIG_TAG", None)
 
 
 def test_get_config_value_default():
