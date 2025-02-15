@@ -16,7 +16,13 @@ def get_config_value(path, default=NO_DEFAULT):
     try:
         for key in path.split("."):
             if isinstance(value, dict):
-                value = value.get(f"{key}[{config_tag}]") or value.get(key)
+                found = value.get(f"{key}[{config_tag}]")
+                if found:
+                    value = found
+                    break
+
+            if isinstance(value, dict):
+                value = value[key]
     except KeyError:
         if default is NO_DEFAULT:
             raise
