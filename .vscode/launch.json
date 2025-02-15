@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python Debugger: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "pytest: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "module": "pytest",
+      "args": [
+        "-svvvv",
+        // "${file}",
+        "${file}::test_get_config_value_nonexistent_key"
+      ],
+      "justMyCode": true
+    }
+  ]
+}
