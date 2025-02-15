@@ -37,13 +37,15 @@ def test_get_config_value_nonexistent_tag():
     assert get_config_value("s3_paths.nested.nested_key") == "nested_value"
 
 
-# def test_get_config_value_nested_tag():
-#     os.environ["CONFIG_TAG"] = "001"
-#     assert get_config_value("s3_paths.incoming") == "s3://001-incoming"
-#     assert get_config_value("s3_paths.outgoing") == "s3://my-bucket/outgoing"
+def test_get_config_value_top_and_nested():
+    os.environ["CONFIG_TAG"] = "001"
+    assert get_config_value("s3_paths.incoming") == "s3://001-incoming"
+    assert get_config_value("s3_paths.outgoing") == "s3://my-bucket/outgoing"
+    assert get_config_value("s3_paths.nested.nested_key") == "nested_value"
 
 
-# def test_get_config_value_specific_nested_tag():
-#     os.environ["CONFIG_TAG"] = "001,002"
-#     assert get_config_value("s3_paths.incoming[001]") == "s3://incoming-001"
-#     assert get_config_value("s3_paths.outgoing[002]") == "s3://001-outgoing-002"
+def test_get_config_value_specific_nested_tag():
+    os.environ["CONFIG_TAG"] = "002,001"
+    assert get_config_value("s3_paths.incoming") == "s3://001-incoming"
+    assert get_config_value("s3_paths.outgoing") == "s3://001-outgoing-002"
+    assert get_config_value("s3_paths.nested.nested_key") == "nested_value"

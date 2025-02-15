@@ -10,17 +10,17 @@ NO_DEFAULT = object()
 
 
 def get_config_value(path, default=NO_DEFAULT):
-    config_tag = os.environ.get("CONFIG_TAG")
+    config_tags = os.environ.get("CONFIG_TAG", "").split(",")
     value = CONFIG
 
     try:
         for key in path.split("."):
-            if isinstance(value, dict):
-                found = value.get(f"{key}[{config_tag}]")
-                if found:
-                    value = found
-                    break
-
+            for tag in config_tags:
+                if isinstance(value, dict):
+                    found = value.get(f"{key}[{tag}]")
+                    if found:
+                        value = found
+                        break
             if isinstance(value, dict):
                 value = value[key]
     except KeyError:

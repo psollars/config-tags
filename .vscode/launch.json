@@ -16,8 +16,8 @@
       "module": "pytest",
       "args": [
         "-svvvv",
-        // "${file}",
-        "${file}::test_get_config_value_nonexistent_key"
+        "${file}"
+        // "${file}::test_get_config_value_nonexistent_key"
       ],
       "justMyCode": true
     }
