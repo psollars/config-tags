@@ -3,6 +3,8 @@ s3_paths:
   outgoing: s3://my-bucket/outgoing
   incoming[000]: s3://incoming-000
   incoming[001]: s3://incoming-001
+  nested:
+    nested_key: nested_value
 s3_paths[001]:
   incoming: s3://001-incoming
   outgoing[002]: s3://001-outgoing-002
