@@ -1,21 +1,20 @@
 import os
-from typing import Union
+from typing import Any, Union
 import yaml
+
 from decorator import config_tag
 
 
 NO_DEFAULT = object()
 
 
-def get_config_value(
-    config: dict[str, Union[dict, list, int, float, str, bool]],
-    path: str,
-    default=NO_DEFAULT,
-):
-    config_tags = os.environ.get("CONFIG_TAG", "").split(",") + [""]
+def get_config_value(config: dict[str, Any], path: str, default=NO_DEFAULT) -> Any:
+    config_tags = os.environ.get("CONFIG_TAG", "").split(",")
+    if config_tags != [""]:
+        config_tags.append("")
     keys = path.split(".")
 
-    def recursive_lookup(cfg, remaining_keys):
+    def recursive_lookup(cfg: Any, remaining_keys: list[str]) -> Union[Any, None]:
         if not remaining_keys:
             return cfg
 
@@ -40,13 +39,10 @@ def get_config_value(
     return value
 
 
-@config_tag("000")
+# @config_tag("000")
 @config_tag("001")
-@config_tag("002")
+# @config_tag("002")
 def get_buckets():
-    config_tags = os.environ.get("CONFIG_TAG")
-    print("config_tags:", config_tags)
-
     with open("config.yaml", encoding="utf-8") as f:
         CONFIG = yaml.safe_load(f)
 
