@@ -163,7 +163,3 @@ def test_get_config_value_list_handling():
         get_config_value(config, "services.name")
 
     assert get_config_value(config, "services") == config["services"]
-
-
-
-

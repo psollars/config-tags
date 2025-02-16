@@ -1,15 +1,10 @@
 import os
 from typing import Union
 import yaml
-
 from decorator import config_tag
 
 
 NO_DEFAULT = object()
-
-
-def is_primitive(value):
-    return isinstance(value, (int, float, str, bool))
 
 
 def get_config_value(
@@ -22,7 +17,7 @@ def get_config_value(
 
     def recursive_lookup(cfg, remaining_keys):
         if not remaining_keys:
-            return cfg  # if is_primitive(cfg) else None
+            return cfg
 
         key, *next_keys = remaining_keys
 
@@ -46,14 +41,14 @@ def get_config_value(
 
 
 @config_tag("000")
-# @config_tag("001")
-# @config_tag("002")
+@config_tag("001")
+@config_tag("002")
 def get_buckets():
-    with open("config.yaml", encoding="utf-8") as f:
-        CONFIG = yaml.safe_load(f)
-
     config_tags = os.environ.get("CONFIG_TAG")
     print("config_tags:", config_tags)
+
+    with open("config.yaml", encoding="utf-8") as f:
+        CONFIG = yaml.safe_load(f)
 
     i = get_config_value(CONFIG, "s3_paths.incoming")
     o = get_config_value(CONFIG, "s3_paths.outgoing")
